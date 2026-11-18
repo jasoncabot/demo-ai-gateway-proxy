@@ -1,0 +1,42 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "demo-ai-gateway-proxy",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-23",
+	"observability": {
+		"enabled": true,
+	},
+	"upload_source_maps": true,
+	/**
+	 * Route this Worker on the AI Gateway custom domain (the hostname you added
+	 * in the gateway's "Domains" tab). Access — enabled from the gateway's
+	 * "Access" tab — runs BEFORE this Worker, so every request it sees has
+	 * already been authenticated.
+	 *
+	 * Uncomment and point at your own gateway hostname to deploy:
+	 */
+	// "route": {
+	// 	"pattern": "ai.example.com/*",
+	// 	"zone_name": "ai.example.com",
+	// },
+	"vars": {
+		// Zero Trust team domain (no trailing slash) — replace with yours,
+		// e.g. https://<your-team>.cloudflareaccess.com
+		"TEAM_DOMAIN": "https://example.cloudflareaccess.com",
+		// AUD tag of the Access application created on the gateway's Access tab
+		// (Zero Trust → Access controls → Applications → your gateway app →
+		// Additional settings)
+		"ACCESS_AUD": "REPLACE_WITH_AUD_TAG",
+		// The gateway custom domain this Worker is routed on (matches the
+		// route above).
+		"GATEWAY_HOST": "ai.example.com",
+	},
+	/**
+	 * This demo holds no secrets: Access is the credential, provider keys live
+	 * in the gateway (BYOK / Unified Billing) or pass through from clients.
+	 */
+}

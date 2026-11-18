@@ -1,0 +1,57 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "aig-workers-ai/workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+  "small_model": "aig-workers-ai/workers-ai/@cf/meta/llama-3.2-3b-instruct",
+  "enabled_providers": ["aig-workers-ai", "ai-gateway", "claude-via-gateway"],
+  "provider": {
+    "aig-workers-ai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Workers AI (gateway-billed)",
+      "options": {
+        "baseURL": "https://ai.example.com/compat",
+        "headers": {
+          "Cf-Access-Jwt-Assertion": "{env:AIG_ACCESS_TOKEN}"
+        }
+      },
+      "models": {
+        "workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
+          "name": "Llama 3.3 70B FP8 fast (function calling)",
+          "limit": { "context": 24000, "output": 8192 }
+        },
+        "workers-ai/@cf/meta/llama-3.2-3b-instruct": {
+          "name": "Llama 3.2 3B (cheap, no tools)",
+          "limit": { "context": 80000, "output": 8192 }
+        }
+      }
+    },
+    "ai-gateway": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenAI via gateway (BYOK passthrough)",
+      "options": {
+        "baseURL": "https://ai.example.com/openai/v1",
+        "apiKey": "{env:OPENAI_API_KEY}",
+        "headers": {
+          "Cf-Access-Jwt-Assertion": "{env:AIG_ACCESS_TOKEN}"
+        }
+      },
+      "models": {
+        "gpt-4.1-mini": { "name": "GPT-4.1 mini via gateway" },
+        "gpt-5.5": { "name": "GPT-5.5 via gateway" }
+      }
+    },
+    "claude-via-gateway": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Claude via gateway (BYOK passthrough)",
+      "options": {
+        "baseURL": "https://ai.example.com/anthropic/v1",
+        "apiKey": "{env:ANTHROPIC_API_KEY}",
+        "headers": {
+          "Cf-Access-Jwt-Assertion": "{env:AIG_ACCESS_TOKEN}"
+        }
+      },
+      "models": {
+        "claude-sonnet-4-5": { "name": "Claude Sonnet 4.5 via gateway" }
+      }
+    }
+  }
+}
